@@ -5,7 +5,7 @@ export enum Jwt {
     Token = 'jwt-token'
 }
 
-interface LoginState {
+export interface LoginState {
     isAuthenticated: boolean;
 }
 

@@ -6,7 +6,6 @@ import million from "million/compiler";
 // https://vitejs.dev/config/
 export default defineConfig({
     server: {
-        https: true,
         proxy: {
             "/api": {
                 target: "https://localhost:7224",

@@ -1,7 +1,7 @@
 import { MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useAppDispatch, useAppSelector } from '../../hooks.ts';
 import styled from 'styled-components';
 import { logout, Jwt } from './';
 
