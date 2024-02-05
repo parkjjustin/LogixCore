@@ -116,7 +116,7 @@ const ErrorMessage = styled.span`
     font-size: .75rem;
     color: red;
     padding-left: 0.25rem;
-    padding-top: 0.5rem;
+    margin-top: -10px;
 `
 
 const LoginModule = () => {
@@ -125,6 +125,7 @@ const LoginModule = () => {
         handleSubmit,
         formState: { errors },
         setValue,
+        getValues,
         reset
     } = useForm<UserLogin>();
     const dispatch = useAppDispatch();
@@ -145,9 +146,9 @@ const LoginModule = () => {
     }
 
     const onSubmit: SubmitHandler<UserLogin> = async (userLogin: UserLogin) => {
-        userLogin.password = unmaskedPassword;
+        setValue("password", unmaskedPassword);
         try {
-            const response = await LoginApi.login(userLogin);
+            const response = await LoginApi.login(getValues());
             localStorage.setItem(Jwt.Token, response.jwtToken);
             dispatch(login(response.isAuthenticated));
             navigate('/test');
@@ -192,9 +193,8 @@ const LoginModule = () => {
                             required
                         />
                         <Label>Username</Label>
-                        {errors?.username && <ErrorMessage>{errors.username.message}</ErrorMessage>}
                     </InputGroup>
-
+                    {errors?.username && <ErrorMessage>{errors.username.message}</ErrorMessage>}
                     <InputGroup>
                         <Input
                             {...register('password', {
@@ -205,8 +205,8 @@ const LoginModule = () => {
                             autoComplete={'off'}
                             required />
                         <Label>Password</Label>
-                        {errors?.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
                     </InputGroup>
+                    {errors?.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
                     <LoginButton type='submit'>Log in</LoginButton>
                     <ClearButton type='reset'onClick={clearState}>Clear</ClearButton>
                 </Form>

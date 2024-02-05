@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LogixCore.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+41bd9dbc9d1f1d21faffb7fc04a5ec723fb72b37")]
 [assembly: System.Reflection.AssemblyProductAttribute("LogixCore.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LogixCore.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
