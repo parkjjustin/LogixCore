@@ -119,6 +119,19 @@ const ErrorMessage = styled.span`
     margin-top: -10px;
 `
 
+const ErrorBox = styled.div`
+    font-size: .75rem;
+    color: red;
+    background: #f5c6cb;
+    border: 2px solid #721c24;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+`
+
 const LoginModule = () => {
     const {
         register,
@@ -131,6 +144,7 @@ const LoginModule = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [unmaskedPassword, setUnmaskedPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
         const passwordValue = e.currentTarget.value;
@@ -154,7 +168,7 @@ const LoginModule = () => {
             navigate('/test');
         } catch (error) {
             if (error instanceof Error) {
-                console.log(error.message);
+                setErrorMessage(error.message);
             }
         }
         finally {
@@ -174,6 +188,7 @@ const LoginModule = () => {
             <LoginContainer>
                 <ImageLogo src={logo} alt='Logix' />
                 <Header>Secure login</Header>
+                {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
                 <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                     <InputGroup>
                         <Input
