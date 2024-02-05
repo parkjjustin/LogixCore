@@ -180,6 +180,7 @@ const LoginModule = () => {
         e.preventDefault();
         reset();
         setUnmaskedPassword('');
+        setErrorMessage('');
     }
 
     return (
