@@ -23,7 +23,7 @@ public class LoginController : ControllerBase
         }
 
         // var response = await this.loginManager.Login(user, ct);
-        var response = loginManager.Login(user);
+        var response = this.loginManager.Login(user);
         return this.Ok(response);
     }
 }
