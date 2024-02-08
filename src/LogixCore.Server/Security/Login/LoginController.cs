@@ -19,12 +19,12 @@ public class LoginController : ControllerBase
         // public async Task<ActionResult<LoginResponse>> Login([FromBody] UserLoginModel user, CancellationToken ct)
         if (user.Username == "baduser")
         {
-            return Unauthorized();
+            return this.Unauthorized();
         }
 
         // var response = await this.loginManager.Login(user, ct);
         var response = loginManager.Login(user);
-        return Ok(response);
+        return this.Ok(response);
     }
 }
 
