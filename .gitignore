@@ -3,5 +3,5 @@
 ################################################################################
 
 /.vs
-**/bin
-**/obj
+/src/LogixCore.Server/bin/
+/src/LogixCore.Server/obj/
