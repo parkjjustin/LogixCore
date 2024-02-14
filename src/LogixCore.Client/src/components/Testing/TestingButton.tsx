@@ -19,15 +19,29 @@ const TestingButton = () => {
 
         try {
             const response = await TestingApi.testing();
-            const message = response ? 'Authorized' : 'Unauthorized';
 
-            window.alert(message);
+            window.alert(response);
         } catch (error) {
-            window.alert(error);
+            if (error instanceof Error)
+                window.alert(error.message);
         }
     }
 
     return (<Button onClick={onClick}>Test Api</Button>)
 }
+const PostTestingButton = () => {
+    const onClick = async (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
 
-export { TestingButton }
+        try {
+            const response = await TestingApi.testingPost("test");
+            window.alert(response);
+        } catch (error) {
+            if (error instanceof Error)
+                window.alert(error.message);
+        }
+    }
+
+    return (<Button onClick={onClick}>Test POST Api</Button>)
+}
+export { TestingButton, PostTestingButton }

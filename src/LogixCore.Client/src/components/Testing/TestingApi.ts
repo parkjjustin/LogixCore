@@ -1,13 +1,23 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 const TestingApi = {
-    async testing(): Promise<boolean> {
-        const response = await axios.get<boolean>('api/testing')
-            .catch(error => {
-                throw new Error(error.response.statusText);
-            });
-
-        return response.data;
+    async testing(): Promise<boolean | undefined> {
+        try {
+            const response = await axios.get<boolean>('api/testing');
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError)
+                throw new Error(error?.response?.statusText);
+        }
+    },
+    async testingPost(test: string): Promise<string | undefined> {
+        try {
+            const response = await axios.post<string>('api/testing', { test: test });
+            return response.data;
+        } catch (error) {
+            if (error instanceof AxiosError)
+                throw new Error(error?.response?.statusText);
+        }
     },
 }
 

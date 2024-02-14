@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import logo from '../../assets/logo.png';
 import robot from '../../assets/logix-robo.png';
 
-import { Jwt, login, LoginApi, UserLogin } from './'
+import { setAntiforgeryToken, login, LoginApi, UserLogin } from './'
 import { useAppDispatch } from '../../hooks';
 
 const Container = styled.div`
@@ -163,8 +163,9 @@ const LoginModule = () => {
         setValue("password", unmaskedPassword);
         try {
             const response = await LoginApi.login(getValues());
-            localStorage.setItem(Jwt.Token, response.jwtToken);
-            dispatch(login(response.isAuthenticated));
+            const token = await LoginApi.getAntiforgeryToken();
+            dispatch(login(response));
+            dispatch(setAntiforgeryToken(token));
             navigate('/test');
         } catch (error) {
             if (error instanceof Error) {

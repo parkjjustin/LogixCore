@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { JwtPayload, jwtDecode } from 'jwt-decode';
 import { useAppDispatch, useAppSelector } from '../../hooks.ts';
 import styled from 'styled-components';
-import { logout, Jwt } from './';
+import { logout, Jwt, LoginApi } from './';
+import axios from 'axios';
 
 interface ExtendedJwtPayload extends JwtPayload {
     Id?: string;
@@ -30,16 +31,21 @@ const LogoutButton = styled.button`
 `
 
 const LoginScreen = () => {
-    const isAuthenticated = useAppSelector(state => state.isAuthenticated);
+    const isAuthenticated = useAppSelector(state => state.isAuthenticated.isAuthenticated);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const token = localStorage.getItem(Jwt.Token);
-    const decoded = token ? jwtDecode<ExtendedJwtPayload>(token) : null;
+    // const token = localStorage.getItem(Jwt.Token);
+    // const decoded = token ? jwtDecode<ExtendedJwtPayload>(token) : null;
 
     const onLogOutClick = async (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         dispatch(logout(false));
-        navigate('/');
+        // navigate('/');
+    }
+
+    const onLogOut= async (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        await LoginApi.logout();
     }
 
     if (isAuthenticated) {
@@ -48,10 +54,11 @@ const LoginScreen = () => {
                 <LoggedInContainer>
                 <div>
                         You are logged in!
-                        <p>Username: {decoded?.name?.toString()}</p>
-                        <p>UserId: {decoded?.Id?.toString()}</p>
+                        {/*<p>Username: {decoded?.name?.toString()}</p>*/}
+                        {/*<p>UserId: {decoded?.Id?.toString()}</p>*/}
                 </div >
                     <LogoutButton onClick={onLogOutClick}>Logout</LogoutButton>
+                    <LogoutButton onClick={onLogOut}>Logout</LogoutButton>
                 </LoggedInContainer>
             </>
         );
