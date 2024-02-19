@@ -1,3 +1,4 @@
+using LogixCore.Server.Middleware.SecurityHeader;
 using LogixCore.Server.Security.Login;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -53,26 +54,6 @@ builder.Services
         options.HeaderName = "X-XSRF-TOKEN";
         options.SuppressXFrameOptionsHeader = false;
     });
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-
-//}).AddJwtBearer(options =>
-//{
-//    options.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidIssuer = configuration["Jwt:Issuer"],
-//        ValidAudience = configuration["Jwt:Audience"],
-//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["Jwt:Key"]!)),
-//        ValidateIssuer = true,
-//        ValidateAudience = true,
-//        ValidateLifetime = true,
-//        ValidateIssuerSigningKey = true,
-//        ClockSkew = TimeSpan.Zero
-//    };
-//});
 
 builder.Services.AddAuthorization();
 
@@ -97,6 +78,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
+app.UseMiddleware<SecurityHeadersMiddleware>();
 app.UseAntiforgery();
 
 app.MapControllers();

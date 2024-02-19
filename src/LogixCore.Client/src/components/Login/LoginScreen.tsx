@@ -4,7 +4,6 @@ import { JwtPayload, jwtDecode } from 'jwt-decode';
 import { useAppDispatch, useAppSelector } from '../../hooks.ts';
 import styled from 'styled-components';
 import { logout, Jwt, LoginApi } from './';
-import axios from 'axios';
 
 interface ExtendedJwtPayload extends JwtPayload {
     Id?: string;

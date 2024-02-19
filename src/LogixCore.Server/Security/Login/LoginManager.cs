@@ -32,50 +32,11 @@ public class LoginManager : ILoginManager
     {
 
         var authenticate = await GenerateScheme(user);
-        //var token = GenerateJwtToken(user);
-        //var refreshToken = GenerateRefreshToken();
+
         return new LoginResponse
         {
             IsAuthenticated = authenticate,
-            //JwtToken = token,
-            //RefreshToken = refreshToken
         };
-    }
-
-    private string GenerateJwtToken(UserLoginModel user)
-    {
-        var issuer = configuration["Jwt:Issuer"];
-        var audience = configuration["Jwt:Audience"];
-        var key = Encoding.ASCII.GetBytes
-        (configuration["Jwt:Key"]!);
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(new[]
-            {
-                new Claim("Id", user.UserId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Name, user.Username),
-                new Claim(JwtRegisteredClaimNames.Jti,
-                Guid.NewGuid().ToString())
-            }),
-            Expires = DateTime.UtcNow.AddMinutes(5), //short lifespan
-            Issuer = issuer,
-            Audience = audience,
-            SigningCredentials = new SigningCredentials
-            (new SymmetricSecurityKey(key),
-            SecurityAlgorithms.HmacSha512Signature)
-        };
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        var jwtToken = tokenHandler.WriteToken(token);
-        return jwtToken;
-    }
-
-    private string GenerateRefreshToken()
-    {
-        var randomNumber = new byte[64];
-        using var rng = RandomNumberGenerator.Create();
-        rng.GetBytes(randomNumber);
-        return Convert.ToBase64String(randomNumber);
     }
 
     public async Task<bool> GenerateScheme(UserLoginModel user)
@@ -95,13 +56,18 @@ public class LoginManager : ILoginManager
         };
         var httpContext = this.httpContextAccessor.HttpContext!;
 
-        if (!httpContext.Request.Headers.Origin.First()!.StartsWith("https://localhost:5173") || !httpContext.Request.Headers.Referer.First()!.StartsWith("https://localhost:5173/"))
+        if (String.IsNullOrEmpty(httpContext.Request.Headers.Origin.FirstOrDefault()) && String.IsNullOrEmpty(httpContext.Request.Headers.Referer.FirstOrDefault()))
         {
             return false;
         }
 
-        httpContext.Response.Headers.XFrameOptions = "DENY";
+        if (!httpContext.Request.Headers.Origin.FirstOrDefault()!.StartsWith("https://localhost:5173") || !httpContext.Request.Headers.Referer.FirstOrDefault()!.StartsWith("https://localhost:5173"))
+        {
+            return false;
+        }
+
         await httpContext.SignInAsync(Cookie, claimsPrincipal, authProperties);
+        httpContext.Session.SetString("IsAuthenticated", "true");
         return true;
     }
 
@@ -117,7 +83,4 @@ public class LoginManager : ILoginManager
 public class LoginResponse
 {
     public bool IsAuthenticated { get; set; } = false;
-    public string Token { get; init; } = default!;
-    //public string JwtToken { get; init; } = default!;
-    //public string RefreshToken { get; internal set; } = default!;
 }

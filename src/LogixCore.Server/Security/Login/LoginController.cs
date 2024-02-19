@@ -44,11 +44,11 @@ public class LoginController : ControllerBase
     [Authorize]
     public ActionResult<string> GetAntiforgeryToken()
     {
-        //var httpContext = this.httpContextAccessor.HttpContext!;
-        //var token = this.antiforgery.GetAndStoreTokens(httpContext).RequestToken!;
-        //httpContext.Response.Headers.Append("X-XSRF-TOKEN", token);
-        //return this.Ok(token);
-        return this.Ok("Succeeded");
+        var httpContext = this.httpContextAccessor.HttpContext!;
+        var token = this.antiforgery.GetAndStoreTokens(httpContext).RequestToken!;
+        httpContext.Response.Headers.Append("X-XSRF-TOKEN", token);
+        return this.Ok(token);
+        //return this.Ok("Succeeded");
     }
 
     [HttpPost("logout")]
