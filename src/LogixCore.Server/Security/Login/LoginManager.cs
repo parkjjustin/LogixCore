@@ -41,6 +41,19 @@ public class LoginManager : ILoginManager
 
     public async Task<bool> GenerateScheme(UserLoginModel user)
     {
+        var httpContext = this.httpContextAccessor.HttpContext!;
+
+        // Fix this issue
+        if (String.IsNullOrEmpty(httpContext.Request.Headers.Origin.FirstOrDefault()) && String.IsNullOrEmpty(httpContext.Request.Headers.Referer.FirstOrDefault()))
+        {
+            return false;
+        }
+
+        if (!httpContext.Request.Headers.Origin.FirstOrDefault()!.StartsWith("https://localhost:5173") || !httpContext.Request.Headers.Referer.FirstOrDefault()!.StartsWith("https://localhost:5173"))
+        {
+            return false;
+        }
+
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
@@ -54,17 +67,6 @@ public class LoginManager : ILoginManager
         {
             IsPersistent = false
         };
-        var httpContext = this.httpContextAccessor.HttpContext!;
-
-        if (String.IsNullOrEmpty(httpContext.Request.Headers.Origin.FirstOrDefault()) && String.IsNullOrEmpty(httpContext.Request.Headers.Referer.FirstOrDefault()))
-        {
-            return false;
-        }
-
-        if (!httpContext.Request.Headers.Origin.FirstOrDefault()!.StartsWith("https://localhost:5173") || !httpContext.Request.Headers.Referer.FirstOrDefault()!.StartsWith("https://localhost:5173"))
-        {
-            return false;
-        }
 
         await httpContext.SignInAsync(Cookie, claimsPrincipal, authProperties);
         httpContext.Session.SetString("IsAuthenticated", "true");
