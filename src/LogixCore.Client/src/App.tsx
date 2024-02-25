@@ -3,6 +3,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { persistor, store } from './store'
+import logo from './assets/logo.png';
 import { LoginModule, LoginScreen, PostTestingButton, TestingButton } from './components';
 
 const AppContainer = styled.div`
@@ -13,7 +14,7 @@ const AppContainer = styled.div`
     font-family: "OpenSans", sans-serif;
     display: flex;
     justify-content: center;
-    background-image: linear-gradient(to right, #fc8c0c, #ef5519);
+    background-image: linear-gradient(to bottom right, #fc8c0c, #ef5519);
     place-items: center;
 `
 
@@ -29,6 +30,39 @@ const Nav = styled.nav`
     box-sizing: border-box;
     text-align: right;
 `
+const Container = styled.div`
+    background: #ffffff;
+    width: 70%;
+    height: 80%;
+    border-radius: 15px;
+    box-sizing: border-box;
+    box-shadow: 50px 50px 90px -30px #222222;
+    position: relative;
+`
+
+const ImageLogo = styled.img`
+    position: absolute;
+    top: 1.5rem;
+    left: 3rem;
+    width: 125px;
+`
+
+const LeftDiv = styled.div`
+    width: 35%;
+    height: 100%;
+    border-radius: 15px 0px 0px 15px;
+    background: #ffffff;
+    display: inline-block;
+    vertical-align: top;
+`
+
+const RightDiv = styled.div`
+    width: 65%;
+    height: 100%;
+    background: #eeeeee;
+    border-radius: 0px 15px 15px 0px;
+    display: inline-block;
+`
 
 const App = () => {
     return (
@@ -40,10 +74,17 @@ const App = () => {
                             <TestingButton />
                             <PostTestingButton />
                         </Nav>
-                        <Routes>
-                            <Route index element={<LoginModule />} />
-                            <Route path='test' element={<LoginScreen />} />
-                        </Routes>
+                        <Container>
+                            <LeftDiv>
+                            <ImageLogo src={logo} alt='Logix' />
+                            <Routes>
+                                <Route index element={<LoginModule />} />
+                                <Route path='test' element={<LoginScreen />} />
+                                </Routes>
+                            </LeftDiv>
+                            <RightDiv>
+                            </RightDiv>
+                        </Container>
                     </AppContainer>
 
                 )}

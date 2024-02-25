@@ -30,7 +30,7 @@ const Form = styled.form`
     width: 100%;
     gap: 1rem;
 `
-const ImageLogo = styled.img`
+const LogoImage = styled.img`
     width: 55%;
     image-rendering: crisp-edges;
 `
@@ -188,7 +188,7 @@ const LoginModule = () => {
         <Container title='Logix'>
             <RobotImage src={robot} alt='Logix - Smarter Banking' />
             <LoginContainer>
-                <ImageLogo src={logo} alt='Logix' />
+                <LogoImage src={logo} alt='Logix' />
                 <Header>Secure login</Header>
                 {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
                 <Form noValidate onSubmit={handleSubmit(onSubmit)}>
