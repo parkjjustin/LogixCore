@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import mkcert from 'vite-plugin-mkcert';
 import million from "million/compiler";
+import mkcert from "vite-plugin-mkcert";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,5 +14,5 @@ export default defineConfig({
             }
         }
     },
-    plugins: [million.vite({ auto: true }), react(), mkcert()],
+    plugins: [million.vite({ auto: true }), react(), mkcert()]
 })

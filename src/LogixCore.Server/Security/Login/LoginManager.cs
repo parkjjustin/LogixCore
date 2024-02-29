@@ -69,16 +69,13 @@ public class LoginManager : ILoginManager
         };
 
         await httpContext.SignInAsync(Cookie, claimsPrincipal, authProperties);
-        httpContext.Session.SetString("IsAuthenticated", "true");
         return true;
     }
 
     public async Task Logout()
     {
         var httpContext = this.httpContextAccessor.HttpContext!;
-        await httpContext.SignOutAsync();
-        httpContext.Session.Clear();
-        httpContext.Response.Cookies.Delete(Cookie);
+        await httpContext.SignOutAsync(Cookie);
     }
 }
 

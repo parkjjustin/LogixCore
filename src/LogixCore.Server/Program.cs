@@ -4,7 +4,6 @@ using LogixCore.Server.Security.Login;
 using LogixCore.Server.Security.Users;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using static LogixCore.Server.Security.Register.RegisterController;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -48,16 +47,6 @@ builder.Services
     });
 
 builder.Services
-    .AddSession(options =>
-    {
-        options.Cookie.SameSite = SameSiteMode.Strict;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        options.Cookie.HttpOnly = true;
-        options.Cookie.IsEssential = true;
-        options.IdleTimeout = TimeSpan.FromMinutes(5);
-    });
-
-builder.Services
     .AddAntiforgery(options =>
     {
         options.HeaderName = "X-XSRF-TOKEN";
@@ -68,8 +57,8 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ILoginManager, LoginManager>();
-builder.Services.AddScoped<IUserManager<RegisterUserModel>, UserManager<RegisterUserModel>>();
-builder.Services.AddScoped<IUserStore<User>, UserStore<User>>();
+builder.Services.AddScoped(typeof(IUserManager<>), typeof(UserManager<>));
+builder.Services.AddScoped(typeof(IUserStore<>), typeof(UserStore<>));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -88,7 +77,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseSession();
 app.UseMiddleware<SecurityHeadersMiddleware>();
 app.UseAntiforgery();
 

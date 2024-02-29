@@ -1,13 +1,7 @@
 ﻿using Isopoh.Cryptography.Argon2;
+using LogixCore.Server.Security.Register;
 
 namespace LogixCore.Server.Security.Users;
-
-public interface IRegisterUserModel
-{
-    string UserName { get; }
-    string Email { get; }
-    string Password { get; }
-}
 
 public interface IUserManager<TUser>
 {
