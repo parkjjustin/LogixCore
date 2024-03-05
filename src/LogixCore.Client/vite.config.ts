@@ -11,7 +11,15 @@ export default defineConfig({
                 target: "https://localhost:7224",
                 changeOrigin: true,
                 secure: false,
-            }
+            },
+            "/signin-oidc": {
+                target: "https://localhost:7224",
+                secure: false,
+            },
+            "/signout-callback-oidc": {
+                target: "https://localhost:7224",
+                secure: false,
+            },
         }
     },
     plugins: [million.vite({ auto: true }), react(), mkcert()]

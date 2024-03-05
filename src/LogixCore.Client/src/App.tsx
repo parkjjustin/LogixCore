@@ -3,7 +3,6 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { persistor, store } from './store'
-import logo from './assets/logo.png';
 import { LoginModule, LoginScreen, PostTestingButton, TestingButton } from './components';
 
 const AppContainer = styled.div`
@@ -40,13 +39,6 @@ const Container = styled.div`
     position: relative;
 `
 
-const ImageLogo = styled.img`
-    position: absolute;
-    top: 1.5rem;
-    left: 3rem;
-    width: 125px;
-`
-
 const LeftDiv = styled.div`
     width: 35%;
     height: 100%;
@@ -76,7 +68,6 @@ const App = () => {
                         </Nav>
                         <Container>
                             <LeftDiv>
-                            <ImageLogo src={logo} alt='Logix' />
                             <Routes>
                                 <Route index element={<LoginModule />} />
                                 <Route path='test' element={<LoginScreen />} />

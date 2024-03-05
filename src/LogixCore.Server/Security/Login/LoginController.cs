@@ -21,14 +21,11 @@ public class LoginController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponse>> Login([FromBody] UserLoginModel user)
     {
-        // if there was an actual database lookup, I'd rewrite this to be
-        // public async Task<ActionResult<LoginResponse>> Login([FromBody] UserLoginModel user, CancellationToken ct)
         if (user.Username == "baduser")
         {
             return this.Unauthorized();
         }
 
-        // var response = await this.loginManager.Login(user, ct);
         var response = await this.loginManager.Login(user);
 
         if (!response.IsAuthenticated)
@@ -47,10 +44,10 @@ public class LoginController : ControllerBase
         var token = this.antiforgery.GetAndStoreTokens(httpContext).RequestToken!;
         httpContext.Response.Headers.Append("X-XSRF-TOKEN", token);
         return this.Ok(token);
-        //return this.Ok("Succeeded");
     }
 
     [HttpPost("logout")]
+    [Authorize]
     public ActionResult Logout()
     {
         this.loginManager.Logout();

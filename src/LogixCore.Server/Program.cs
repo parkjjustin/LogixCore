@@ -1,8 +1,10 @@
+using Duende.Bff.Yarp;
 using LogixCore.Server.Data;
 using LogixCore.Server.Middleware.SecurityHeader;
 using LogixCore.Server.Security.Login;
 using LogixCore.Server.Security.Users;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,7 @@ var configuration = builder.Configuration;
 
 builder.Services.AddControllers();
 builder.Services.AddMvc();
+builder.Services.AddBff().AddRemoteApis().AddServerSideSessions();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -19,30 +22,54 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services
-    .AddAuthentication("logixcore_auth")
+    .AddAuthentication(options =>
+    {
+        options.DefaultScheme = "logixcore_auth";
+        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+    })
     .AddCookie("logixcore_auth", options =>
     {
-        options.Cookie.Name = "logixcore_auth";
         options.Cookie.HttpOnly = true;
         options.Cookie.IsEssential = true;
         options.Cookie.SameSite = SameSiteMode.Strict;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
         options.SlidingExpiration = true;
         options.Events = new CookieAuthenticationEvents()
         {
             OnRedirectToLogin = (ctx) =>
             {
-                if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
-                    ctx.Response.StatusCode = 401;
+                ctx.Response.StatusCode = 401;
                 return Task.CompletedTask;
             },
             OnRedirectToAccessDenied = (ctx) =>
             {
-                if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
-                    ctx.Response.StatusCode = 403;
+                ctx.Response.StatusCode = 403;
                 return Task.CompletedTask;
             }
+        };
+    }).AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+    {
+        options.SignInScheme = "logixcore_auth";
+        options.Authority = "https://localhost:5001"; // address of identity provider
+        options.ClientId = "interactive.confidential";
+        options.ClientSecret = "secret";
+
+        options.ResponseType = "code";
+        options.ResponseMode = "query";
+        options.UsePkce = true;
+
+        options.GetClaimsFromUserInfoEndpoint = true;
+        options.MapInboundClaims = false;
+        options.SaveTokens = true;
+
+        options.Scope.Add("openid");
+        options.Scope.Add("api");
+
+        options.TokenValidationParameters = new()
+        {
+            NameClaimType = "name",
+            RoleClaimType = "role"
         };
     });
 
@@ -76,7 +103,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+app.UseBff();
 app.UseAuthorization();
+
 app.UseMiddleware<SecurityHeadersMiddleware>();
 app.UseAntiforgery();
 

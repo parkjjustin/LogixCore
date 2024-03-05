@@ -2,8 +2,6 @@
 import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import logo from '../../assets/logo.png';
-import robot from '../../assets/logix-robo.png';
 
 import { setAntiforgeryToken, login, LoginApi, UserLogin } from './'
 import { useAppDispatch } from '../../hooks';
@@ -29,14 +27,6 @@ const Form = styled.form`
     flex-direction: column;
     width: 100%;
     gap: 1rem;
-`
-const LogoImage = styled.img`
-    width: 55%;
-    image-rendering: crisp-edges;
-`
-const RobotImage = styled.img`
-    max-width: 70%;
-    image-rendering: crisp-edges;
 `
 
 const InputGroup = styled.div`
@@ -186,9 +176,7 @@ const LoginModule = () => {
 
     return (
         <Container title='Logix'>
-            <RobotImage src={robot} alt='Logix - Smarter Banking' />
             <LoginContainer>
-                <LogoImage src={logo} alt='Logix' />
                 <Header>Secure login</Header>
                 {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
                 <Form noValidate onSubmit={handleSubmit(onSubmit)}>

@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace LogixCore.Server.Security.Login;
 
@@ -17,15 +13,11 @@ public interface ILoginManager
 public class LoginManager : ILoginManager
 {
     private const string Cookie = "logixcore_auth";
-    private readonly IConfiguration configuration;
     private readonly IHttpContextAccessor httpContextAccessor;
-    private readonly IAntiforgery antiforgery;
 
-    public LoginManager(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IAntiforgery antiforgery)
+    public LoginManager(IHttpContextAccessor httpContextAccessor)
     {
-        this.configuration = configuration;
         this.httpContextAccessor = httpContextAccessor;
-        this.antiforgery = antiforgery;
     }
 
     public async Task<LoginResponse> Login(UserLoginModel user)
