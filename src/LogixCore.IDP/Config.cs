@@ -19,8 +19,8 @@ public static class Config
             {
                 new Client()
                 {
-                    ClientName = "Core",
-                    ClientId = "core-client",
+                    ClientName = "LogixCore",
+                    ClientId = "logixcore-client",
                     AllowedGrantTypes = GrantTypes.Code,
                     RedirectUris =
                     {

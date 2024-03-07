@@ -1,4 +1,6 @@
-﻿namespace LogixCore.IDP.Security;
+﻿using Isopoh.Cryptography.Argon2;
+
+namespace LogixCore.IDP.Security;
 
 public interface IUserManager<TUser>
 {
@@ -22,7 +24,6 @@ public class UserManager<TUser> : IUserManager<TUser> where TUser : IRegisterUse
 
     private static string HashPassword(string password)
     {
-        // return Argon2.Hash(password);
-        return "";
+        return Argon2.Hash(password, type: Argon2Type.DataIndependentAddressing);
     }
 }

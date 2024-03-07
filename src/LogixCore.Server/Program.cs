@@ -44,7 +44,7 @@ builder.Services
     {
         options.SignInScheme = "logixcore_auth";
         options.Authority = "https://localhost:5001"; // address of identity provider
-        options.ClientId = "interactive.confidential";
+        options.ClientId = "logixcore-client";
         options.ClientSecret = "secret";
 
         options.ResponseType = "code";
