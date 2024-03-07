@@ -1,6 +1,4 @@
-﻿using LogixCore.Server.Security.Users;
-
-namespace LogixCore.Server.Security.Register;
+﻿namespace LogixCore.IDP.Security;
 
 public interface IRegisterUserModel
 {

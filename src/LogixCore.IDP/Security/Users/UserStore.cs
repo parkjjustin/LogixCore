@@ -1,4 +1,4 @@
-﻿using LogixCore.Data;
+﻿using LogixCore.IDP.Data;
 
 namespace LogixCore.IDP.Security;
 

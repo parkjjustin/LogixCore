@@ -1,11 +1,8 @@
 using Duende.Bff.Yarp;
-using LogixCore.Server.Data;
 using LogixCore.Server.Middleware.SecurityHeader;
 using LogixCore.Server.Security.Login;
-using LogixCore.Server.Security.Users;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -15,11 +12,6 @@ var configuration = builder.Configuration;
 builder.Services.AddControllers();
 builder.Services.AddMvc();
 builder.Services.AddBff().AddRemoteApis().AddServerSideSessions();
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
 
 builder.Services
     .AddAuthentication(options =>
@@ -84,8 +76,6 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ILoginManager, LoginManager>();
-builder.Services.AddScoped(typeof(IUserManager<>), typeof(UserManager<>));
-builder.Services.AddScoped(typeof(IUserStore<>), typeof(UserStore<>));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -105,6 +95,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseBff();
 app.UseAuthorization();
+app.MapBffManagementEndpoints();
 
 app.UseMiddleware<SecurityHeadersMiddleware>();
 app.UseAntiforgery();

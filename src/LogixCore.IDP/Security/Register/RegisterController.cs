@@ -1,7 +1,6 @@
-﻿using LogixCore.Server.Security.Users;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace LogixCore.Server.Security.Register;
+namespace LogixCore.IDP.Security;
 
 [Route("api")]
 public class RegisterController : ControllerBase

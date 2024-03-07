@@ -1,4 +1,6 @@
-using Core.Data;
+using LogixCore.IDP.Data;
+using LogixCore.IDP.Security;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -15,6 +17,12 @@ internal static class HostingExtensions
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
         });
 
+        builder.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor
+            | ForwardedHeaders.XForwardedProto;
+        });
+
         builder.Services.AddIdentityServer(options =>
             {
                 // https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/api_scopes#authorization-based-on-scopes
@@ -23,6 +31,9 @@ internal static class HostingExtensions
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryClients(Config.Clients);
+
+        builder.Services.AddScoped(typeof(IUserManager<>), typeof(UserManager<>));
+        builder.Services.AddScoped(typeof(IUserStore<>), typeof(UserStore<>));
 
         return builder.Build();
     }
