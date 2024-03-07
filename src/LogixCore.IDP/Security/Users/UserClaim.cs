@@ -1,4 +1,4 @@
-﻿namespace Core.Users;
+﻿namespace LogixCore.IDP.Security;
 
 public sealed class UserClaim
 {

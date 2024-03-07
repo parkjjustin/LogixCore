@@ -1,7 +1,7 @@
 ﻿using Isopoh.Cryptography.Argon2;
 using LogixCore.Server.Security.Register;
 
-namespace LogixCore.Server.Security.Users;
+namespace LogixCore.IDP.Security;
 
 public interface IUserManager<TUser>
 {

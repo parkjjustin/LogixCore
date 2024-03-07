@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Core.Users;
+namespace LogixCore.IDP.Security;
 
 public interface IUser<Guid>
 {

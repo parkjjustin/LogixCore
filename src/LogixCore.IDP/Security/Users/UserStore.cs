@@ -1,6 +1,6 @@
-﻿using LogixCore.Server.Data;
+﻿using LogixCore.Data;
 
-namespace LogixCore.Server.Security.Users;
+namespace LogixCore.IDP.Security;
 
 public interface IUserStore<TUser> : IDisposable where TUser : class
 {
@@ -9,9 +9,9 @@ public interface IUserStore<TUser> : IDisposable where TUser : class
 
 public class UserStore<TUser> : IUserStore<TUser> where TUser : class
 {
-    private readonly ApplicationDbContext db;
+    private readonly IdentityDbContext db;
 
-    public UserStore(ApplicationDbContext db)
+    public UserStore(IdentityDbContext db)
     {
         this.db = db;
     }

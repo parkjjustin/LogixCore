@@ -1,7 +1,7 @@
-﻿using Core.Users;
+﻿using LogixCore.IDP.Security;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Data;
+namespace LogixCore.Data;
 
 public class IdentityDbContext : DbContext
 {
