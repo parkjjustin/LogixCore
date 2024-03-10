@@ -1,6 +1,5 @@
 using Duende.Bff.Yarp;
-using LogixCore.Server.Middleware.SecurityHeader;
-using LogixCore.Server.Security.Login;
+using LogixCore.Server.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
@@ -12,6 +11,7 @@ var configuration = builder.Configuration;
 builder.Services.AddControllers();
 builder.Services.AddMvc();
 builder.Services.AddBff().AddRemoteApis().AddServerSideSessions();
+builder.Services.AddDistributedMemoryCache();
 
 builder.Services
     .AddAuthentication(options =>
@@ -42,7 +42,6 @@ builder.Services
         };
     }).AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
     {
-        options.SignInScheme = "logixcore_auth";
         options.Authority = "https://localhost:5001"; // address of identity provider
         options.ClientId = "logixcore-client";
         options.ClientSecret = "secret";
@@ -55,6 +54,7 @@ builder.Services
         options.MapInboundClaims = false;
         options.SaveTokens = true;
 
+        options.Scope.Clear();
         options.Scope.Add("openid");
         options.Scope.Add("api");
 
@@ -65,12 +65,12 @@ builder.Services
         };
     });
 
-builder.Services
-    .AddAntiforgery(options =>
-    {
-        options.HeaderName = "X-XSRF-TOKEN";
-        options.SuppressXFrameOptionsHeader = false;
-    });
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(100);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 builder.Services.AddAuthorization();
 
@@ -91,17 +91,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseBff();
 app.UseAuthorization();
-app.MapBffManagementEndpoints();
-
-app.UseMiddleware<SecurityHeadersMiddleware>();
-app.UseAntiforgery();
+app.MapRemoteBffApiEndpoint("/api/register", "https://localhost:5001/api/register").SkipAntiforgery();
+app.MapBffManagementEndpoints(); ;
+app.UseSession();
 
 app.MapControllers();
-
 app.MapFallbackToFile("/index.html");
 
 app.Run();

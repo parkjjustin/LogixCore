@@ -3,7 +3,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { persistor, store } from './store'
-import { LoginModule, LoginScreen, PostTestingButton, TestingButton } from './components';
+import { LoginModule, LoginScreen, PostTestingButton, TestingButton, RegisterModule } from './components';
 
 const AppContainer = styled.div`
     @import url("https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap");
@@ -68,12 +68,13 @@ const App = () => {
                         </Nav>
                         <Container>
                             <LeftDiv>
-                            <Routes>
-                                <Route index element={<LoginModule />} />
-                                <Route path='test' element={<LoginScreen />} />
+                                <Routes>
+                                    <Route index element={<LoginModule />} />
+                                    <Route path='test' element={<LoginScreen />} />
                                 </Routes>
                             </LeftDiv>
                             <RightDiv>
+                                <RegisterModule />
                             </RightDiv>
                         </Container>
                     </AppContainer>

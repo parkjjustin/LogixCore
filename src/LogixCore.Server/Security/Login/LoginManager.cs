@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 
-namespace LogixCore.Server.Security.Login;
+namespace LogixCore.Server.Security;
 
 public interface ILoginManager
 {

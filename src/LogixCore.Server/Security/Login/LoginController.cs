@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LogixCore.Server.Security.Login;
+namespace LogixCore.Server.Security;
 
 [Route("api")]
 public class LoginController : ControllerBase
