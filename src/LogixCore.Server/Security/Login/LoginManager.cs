@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 
 namespace LogixCore.Server.Security;
@@ -36,15 +35,15 @@ public class LoginManager : ILoginManager
         var httpContext = this.httpContextAccessor.HttpContext!;
 
         // Fix this issue
-        if (String.IsNullOrEmpty(httpContext.Request.Headers.Origin.FirstOrDefault()) && String.IsNullOrEmpty(httpContext.Request.Headers.Referer.FirstOrDefault()))
-        {
-            return false;
-        }
+        //if (String.IsNullOrEmpty(httpContext.Request.Headers.Origin.FirstOrDefault()) && String.IsNullOrEmpty(httpContext.Request.Headers.Referer.FirstOrDefault()))
+        //{
+        //    return false;
+        //}
 
-        if (!httpContext.Request.Headers.Origin.FirstOrDefault()!.StartsWith("https://localhost:5173") || !httpContext.Request.Headers.Referer.FirstOrDefault()!.StartsWith("https://localhost:5173"))
-        {
-            return false;
-        }
+        //if (!httpContext.Request.Headers.Origin.FirstOrDefault()!.StartsWith("https://localhost:5173") || !httpContext.Request.Headers.Referer.FirstOrDefault()!.StartsWith("https://localhost:5173"))
+        //{
+        //    return false;
+        //}
 
         var claims = new List<Claim>
         {

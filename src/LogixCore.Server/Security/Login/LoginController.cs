@@ -9,13 +9,11 @@ public class LoginController : ControllerBase
 {
     private readonly ILoginManager loginManager;
     private readonly IHttpContextAccessor httpContextAccessor;
-    private readonly IAntiforgery antiforgery;
 
-    public LoginController(ILoginManager loginManager, IHttpContextAccessor httpContextAccessor, IAntiforgery antiforgery)
+    public LoginController(ILoginManager loginManager, IHttpContextAccessor httpContextAccessor)
     {
         this.loginManager = loginManager;
         this.httpContextAccessor = httpContextAccessor;
-        this.antiforgery = antiforgery;
     }
 
     [HttpPost("login")]
@@ -34,16 +32,6 @@ public class LoginController : ControllerBase
         }
 
         return this.Ok(response);
-    }
-
-    [HttpGet("antiforgery")]
-    [Authorize]
-    public ActionResult<string> GetAntiforgeryToken()
-    {
-        var httpContext = this.httpContextAccessor.HttpContext!;
-        var token = this.antiforgery.GetAndStoreTokens(httpContext).RequestToken!;
-        httpContext.Response.Headers.Append("X-XSRF-TOKEN", token);
-        return this.Ok(token);
     }
 
     [HttpPost("logout")]

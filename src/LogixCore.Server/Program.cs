@@ -7,9 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-builder.Services.AddMvc();
 builder.Services.AddBff().AddRemoteApis().AddServerSideSessions();
 builder.Services.AddDistributedMemoryCache();
 
@@ -60,7 +58,7 @@ builder.Services
 
         options.TokenValidationParameters = new()
         {
-            NameClaimType = "name",
+            //NameClaimType = "name",
             RoleClaimType = "role"
         };
     });
@@ -82,6 +80,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

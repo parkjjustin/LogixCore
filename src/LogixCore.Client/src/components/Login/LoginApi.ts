@@ -33,14 +33,14 @@ export const LoginApi = {
         catch (error) {
             throw new Error("Error occurred during login.")
         }
-    },
-    async getAntiforgeryToken(): Promise<string> {
-        try {
-            const response = await axios.get<string>('api/antiforgery');
-            return response.data;
-        }
-        catch (error) {
-            throw new Error("Error occurred getting antiforgery token.")
-        }
     }
+    //async getAntiforgeryToken(): Promise<string> {
+    //    try {
+    //        const response = await axios.get<string>('api/antiforgery');
+    //        return response.data;
+    //    }
+    //    catch (error) {
+    //        throw new Error("Error occurred getting antiforgery token.")
+    //    }
+    //}
 }

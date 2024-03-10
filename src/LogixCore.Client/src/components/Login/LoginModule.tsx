@@ -153,9 +153,9 @@ const LoginModule = () => {
         setValue("password", unmaskedPassword);
         try {
             const response = await LoginApi.login(getValues());
-            const token = await LoginApi.getAntiforgeryToken();
+            /*const token = await LoginApi.getAntiforgeryToken();*/
             dispatch(login(response));
-            dispatch(setAntiforgeryToken(token));
+            /*dispatch(setAntiforgeryToken(token));*/
             navigate('/test');
         } catch (error) {
             if (error instanceof Error) {

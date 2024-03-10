@@ -22,8 +22,6 @@ internal static class HostingExtensions
             | ForwardedHeaders.XForwardedProto;
         });
 
-        builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyMethod()));
-
         builder.Services.AddIdentityServer(options =>
             {
                 // https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/api_scopes#authorization-based-on-scopes
@@ -51,9 +49,7 @@ internal static class HostingExtensions
         // uncomment if you want to add a UI
         //app.UseStaticFiles();
         //app.UseRouting();
-        app.UseHttpsRedirection();
 
-        app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod());
         app.UseIdentityServer();
         app.MapControllers();
 
