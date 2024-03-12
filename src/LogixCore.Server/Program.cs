@@ -1,5 +1,5 @@
 using Duende.Bff.Yarp;
-using LogixCore.Server.Security;
+using LogixCore.Server.Middleware.IdentityServerApiExtensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
@@ -40,6 +40,7 @@ builder.Services
         };
     }).AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
     {
+        options.SignInScheme = "logixcore_auth";
         options.Authority = "https://localhost:5001"; // address of identity provider
         options.ClientId = "logixcore-client";
         options.ClientSecret = "secret";
@@ -72,9 +73,6 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddScoped<ILoginManager, LoginManager>();
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -95,10 +93,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseBff();
 app.UseAuthorization();
-app.MapRemoteBffApiEndpoint("/api/register", "https://localhost:5001/api/register").SkipAntiforgery();
-app.MapBffManagementEndpoints(); ;
 app.UseSession();
 
+app.MapIdentityServerEndpoint();
 app.MapControllers();
 app.MapFallbackToFile("/index.html");
 

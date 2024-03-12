@@ -1,5 +1,6 @@
 ﻿using LogixCore.IDP.Security;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace LogixCore.IDP.Data;
 
@@ -21,6 +22,16 @@ public class IdentityDbContext : DbContext
         if (this.Database.IsInMemory())
         {
             this.ChangeTracker.ApplyRowVersions();
+        }
+
+        var updatedUserEntries = this.ChangeTracker
+            .Entries<IUser<Guid>>()
+            .Where(e => e.Property(x => x.PasswordHash).IsModified)
+            .OfType<IUser<Guid>>();
+
+        foreach (var entry in updatedUserEntries)
+        {
+            entry.SecurityStamp = Guid.NewGuid().ToString("D");
         }
 
         return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);

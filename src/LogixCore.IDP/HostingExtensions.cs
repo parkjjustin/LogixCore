@@ -10,7 +10,6 @@ internal static class HostingExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddControllers();
         builder.Services.AddDbContext<IdentityDbContext>(options =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -24,6 +23,11 @@ internal static class HostingExtensions
 
         builder.Services.AddIdentityServer(options =>
             {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+
                 // https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/api_scopes#authorization-based-on-scopes
                 options.EmitStaticAudienceClaim = true;
             })
@@ -31,8 +35,10 @@ internal static class HostingExtensions
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryClients(Config.Clients);
 
+        builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         builder.Services.AddScoped(typeof(IUserManager<>), typeof(UserManager<>));
         builder.Services.AddScoped(typeof(IUserStore<>), typeof(UserStore<>));
+        builder.Services.AddScoped<ILoginManager, LoginManager>();
 
         return builder.Build();
     }
@@ -49,12 +55,8 @@ internal static class HostingExtensions
         // uncomment if you want to add a UI
         //app.UseStaticFiles();
         //app.UseRouting();
-
         app.UseIdentityServer();
-        app.MapControllers();
-
-        // uncomment if you want to add a UI
-        //app.UseAuthorization();
+        app.UseAuthorization();
         //app.MapRazorPages().RequireAuthorization();
 
         return app;

@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Antiforgery;
+﻿using Duende.Bff;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LogixCore.Server.Security;
+namespace LogixCore.IDP.Security;
 
-[Route("api")]
+[Route("bff")]
+[BffApi]
 public class LoginController : ControllerBase
 {
     private readonly ILoginManager loginManager;

@@ -8,6 +8,8 @@ public interface IUser<Guid>
     Guid UserId { get; }
     string UserName { get; }
     string Email { get; }
+    string PasswordHash { get; }
+    string SecurityStamp { get; set; }
 }
 
 public sealed class User : IUser<Guid>
@@ -21,7 +23,7 @@ public sealed class User : IUser<Guid>
     public bool PhoneNumberConfirmed { get; private set; } = default!;
     public bool TwoFactorEnabled { get; private set; } = default!;
     public int AccessFailedCount { get; private set; } = default!;
-    public string SecurityStamp { get; private set; } = Guid.NewGuid().ToString("D");
+    public string SecurityStamp { get; set; } = Guid.NewGuid().ToString("D");
     public DateTime CreatedOn { get; private set; }
     public bool IsActive { get; private set; } = default!;
     public byte[] RowVersion { get; init; } = default!;

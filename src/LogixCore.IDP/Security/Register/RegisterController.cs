@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LogixCore.IDP.Security;
 
 [Route("api")]
+[AllowAnonymous]
 public class RegisterController : ControllerBase
 {
     private readonly IUserManager<RegisterUserModel> userManager;
