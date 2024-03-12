@@ -14,7 +14,7 @@ export interface UserRegisterResponse {
 export const RegisterApi = {
     async register(userRegister: UserRegister): Promise<UserRegisterResponse> {
         try {
-            const response = await axios.post<UserRegisterResponse>('api/register', userRegister, { method: 'POST' });
+            const response = await axios.post<UserRegisterResponse>('api/register', userRegister);
             return response.data;
         }
         catch (error) {

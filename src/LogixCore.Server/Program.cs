@@ -11,6 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddBff().AddRemoteApis().AddServerSideSessions();
 builder.Services.AddDistributedMemoryCache();
 
+// I think this needs to be moved to the Identity Provider server,
+// OR I could reference the IDP but I think that might defeat the purpose of having separate servers.
+// and the reason why I need to do this is to verify user credentials when logging in
+// The current login implementation doesn't work because I have not provided the authentication middleware services for login.
+// The registration however does work.
 builder.Services
     .AddAuthentication(options =>
     {

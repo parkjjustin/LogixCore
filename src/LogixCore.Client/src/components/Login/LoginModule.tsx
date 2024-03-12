@@ -57,6 +57,7 @@ const Label = styled.span`
     padding: 0 5px;
     color: #ccc;
     transition: 0.25s;
+    pointer-events: none;
 
     ${Input}:focus ~ & {
         top: 0;
