@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
-namespace Core;
+namespace LogixCore.IDP;
 
 internal static class HostingExtensions
 {

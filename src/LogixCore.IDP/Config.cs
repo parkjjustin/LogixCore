@@ -1,7 +1,7 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 
-namespace Core;
+namespace LogixCore.IDP;
 
 public static class Config
 {

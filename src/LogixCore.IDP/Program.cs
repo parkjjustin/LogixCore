@@ -1,4 +1,4 @@
-﻿using Core;
+﻿using LogixCore.IDP;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()

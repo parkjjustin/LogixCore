@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Duende.IdentityServer;
+using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace LogixCore.IDP.Security;
 
@@ -45,21 +47,23 @@ public class LoginManager : ILoginManager
         //    return false;
         //}
 
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-            new Claim(ClaimTypes.Name, user.Username)
-        };
+        //var claims = new List<Claim>
+        //{
+        //    new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+        //    new Claim(ClaimTypes.Name, user.Username)
+        //};
 
-        var identity = new ClaimsIdentity(claims, Cookie);
+        //var identity = new ClaimsIdentity(claims, Cookie);
 
-        var claimsPrincipal = new ClaimsPrincipal(identity);
+        //var claimsPrincipal = new ClaimsPrincipal(identity);
         var authProperties = new AuthenticationProperties
         {
             IsPersistent = false
         };
 
-        await httpContext.SignInAsync(Cookie, claimsPrincipal, authProperties);
+        var isUser = new IdentityServerUser(user.UserId.ToString());
+
+        await httpContext.SignInAsync(isUser, authProperties);
         return true;
     }
 
