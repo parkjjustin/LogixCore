@@ -35,6 +35,7 @@ internal static class HostingExtensions
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryClients(Config.Clients);
 
+        builder.Services.AddAuthorization();
         builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         builder.Services.AddScoped(typeof(IUserManager<>), typeof(UserManager<>));
         builder.Services.AddScoped(typeof(IUserStore<>), typeof(UserStore<>));

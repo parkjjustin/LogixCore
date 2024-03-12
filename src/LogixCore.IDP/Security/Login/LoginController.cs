@@ -1,11 +1,9 @@
-﻿using Duende.Bff;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogixCore.IDP.Security;
 
-[Route("bff")]
-[BffApi]
+[Route("api")]
 public class LoginController : ControllerBase
 {
     private readonly ILoginManager loginManager;
