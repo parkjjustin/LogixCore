@@ -1,5 +1,6 @@
 using Duende.Bff.Yarp;
 using LogixCore.Server.Middleware.IdentityServerApiExtensions;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
@@ -19,31 +20,11 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services
     .AddAuthentication(options =>
     {
-        options.DefaultScheme = "logixcore_auth";
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
         options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
     })
-    .AddCookie("logixcore_auth", options =>
-    {
-        options.Cookie.HttpOnly = true;
-        options.Cookie.IsEssential = true;
-        options.Cookie.SameSite = SameSiteMode.Strict;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
-        options.SlidingExpiration = true;
-        options.Events = new CookieAuthenticationEvents()
-        {
-            OnRedirectToLogin = (ctx) =>
-            {
-                ctx.Response.StatusCode = 401;
-                return Task.CompletedTask;
-            },
-            OnRedirectToAccessDenied = (ctx) =>
-            {
-                ctx.Response.StatusCode = 403;
-                return Task.CompletedTask;
-            }
-        };
-    }).AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
     {
         options.SignInScheme = "logixcore_auth";
         options.Authority = "https://localhost:5001"; // address of identity provider
@@ -51,16 +32,17 @@ builder.Services
         options.ClientSecret = "secret";
 
         options.ResponseType = "code";
-        options.ResponseMode = "query";
-        options.UsePkce = true;
+        //options.ResponseMode = "query";
+        //options.UsePkce = true;
 
         options.GetClaimsFromUserInfoEndpoint = true;
         options.MapInboundClaims = false;
         options.SaveTokens = true;
 
-        options.Scope.Clear();
-        options.Scope.Add("openid");
-        options.Scope.Add("api");
+        options.ClaimActions.Remove("aud");
+        options.ClaimActions.DeleteClaim("sid");
+        options.ClaimActions.DeleteClaim("idp");
+        options.Scope.Add("roles");
 
         options.TokenValidationParameters = new()
         {

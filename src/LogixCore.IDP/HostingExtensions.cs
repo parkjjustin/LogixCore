@@ -11,6 +11,7 @@ internal static class HostingExtensions
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddControllers();
+        builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyMethod()));
         builder.Services.AddDbContext<IdentityDbContext>(options =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -57,7 +58,7 @@ internal static class HostingExtensions
         // uncomment if you want to add a UI
         //app.UseStaticFiles();s
         //app.UseRouting();
-
+        app.UseCors();
         app.UseIdentityServer();
         app.UseAuthorization();
         app.MapControllers();
